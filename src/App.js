@@ -11,7 +11,7 @@ function App() {
 
   function handleAddItem(item) {
     setListItems((listItems) => [...listItems, item]);
-    console.log("Data di ListItem" + listItems);
+    console.log("ListItem:", listItems);
   }
 
   function handleDeleteItem(id) {
@@ -56,7 +56,7 @@ function Form({ onAddItem }) {
     };
 
     onAddItem(newItem);
-    console.log("data dari newItem" + newItem);
+    console.log("NewItem:", newItem);
 
     setTitle("");
   }
