@@ -6,17 +6,33 @@ const listItems = [
 ];
 
 function App() {
+  // komponen paling atas atau parent
   const [listItems, setListItems] = useState([]);
 
   function handleAddItem(item) {
     setListItems((listItems) => [...listItems, item]);
+    console.log("Data di ListItem" + listItems);
+  }
+
+  function handleDeleteItem(id) {
+    setListItems((listItems) => {
+      const index = listItems.findIndex((item) => item.id === id);
+      if (index === -1) return listItems; // tidak ditemukan, return list lama
+
+      const deletedItem = listItems[index];
+      console.log("Item dihapus:", deletedItem);
+
+      const newList = [...listItems];
+      newList.splice(index, 1); // hapus item di index tersebut
+      return newList;
+    });
   }
 
   return (
     <div className="app">
       <Logo />
       <Form onAddItem={handleAddItem} />
-      <CheckList items={listItems} />
+      <CheckList items={listItems} onDeleteItem={handleDeleteItem} />
       <Stats />
     </div>
   );
@@ -40,6 +56,8 @@ function Form({ onAddItem }) {
     };
 
     onAddItem(newItem);
+    console.log("data dari newItem" + newItem);
+
     setTitle("");
   }
 
@@ -56,26 +74,26 @@ function Form({ onAddItem }) {
   );
 }
 
-function CheckList({ items }) {
+function CheckList({ items, onDeleteItem }) {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item key={item.id} item={item} />
+          <Item key={item.id} item={item} onDeleteItem={onDeleteItem} />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item }) {
+function Item({ item, onDeleteItem }) {
   return (
     <li>
       <input type="checkbox" />
       <span style={{ textDecoration: item.done ? "line-through" : "" }}>
         {item.title}
       </span>
-      <button>❌</button>
+      <button onClick={() => onDeleteItem(item.id)}>❌</button>
     </li>
   );
 }
