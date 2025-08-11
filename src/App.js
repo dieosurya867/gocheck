@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const listItems = [
   { id: 1, title: "Eat", done: false },
@@ -11,7 +11,7 @@ function App() {
 
   function handleAddItem(item) {
     setListItems((listItems) => [...listItems, item]);
-    console.log("ListItem:", listItems);
+    console.log("ListItem Add Item:", listItems);
   }
 
   function handleDeleteItem(id) {
@@ -27,6 +27,10 @@ function App() {
       return newList;
     });
   }
+
+  useEffect(() => {
+    console.log("List terbaru (dari useEffect):", listItems);
+  }, [listItems]);
 
   return (
     <div className="app">
