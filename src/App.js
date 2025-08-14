@@ -55,7 +55,7 @@ function App() {
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
       />
-      <Stats />
+      <Stats items={listItems} />
     </div>
   );
 }
@@ -129,10 +129,31 @@ function Item({ item, onDeleteItem, onToggleItem }) {
   );
 }
 
-function Stats() {
+function Stats({ items }) {
+  if (items.length === 0) {
+    return (
+      <footer className="stats">
+        <span>📝 Yuk mulai bikin catatan!</span>
+      </footer>
+    );
+  }
+
+  //contoh deriving state atau yg disebut data yang tidak perlu
+  // disimpan sebagai state terpisah karena bisa dihitung langsung
+  // dari state lain.
+  const totalItems = items.length;
+  // jadi daripada kita harus membuat totalItems dan doneItems dengan useState
+  //lebih baik memanfaatkan data yg ada lalu dimanipulasi menjadi data yg lain
+  const doneItems = items.filter((item) => item.done).length;
+  const percentage = Math.round((doneItems / totalItems) * 100);
+
   return (
     <footer className="stats">
-      <span>🗒️ Kamu punya x catatan dan baru x yg dichecklist (x%) ✅</span>
+      <span>
+        {percentage === 100
+          ? "✅ Kamu sudah melakukannya semua"
+          : `Kamu punya ${totalItems} catatan dan baru ${doneItems} yg dichecklist (${percentage}%)`}
+      </span>
     </footer>
   );
 }
