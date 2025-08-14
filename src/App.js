@@ -28,15 +28,33 @@ function App() {
     });
   }
 
+  function handleToggleItem(id) {
+    setListItems((listItems) => {
+      return listItems.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            done: !item.done,
+          };
+        }
+        return item;
+      });
+    });
+  }
+
   useEffect(() => {
-    console.log("List terbaru (dari useEffect):", listItems);
+    console.table(listItems);
   }, [listItems]);
 
   return (
     <div className="app">
       <Logo />
       <Form onAddItem={handleAddItem} />
-      <CheckList items={listItems} onDeleteItem={handleDeleteItem} />
+      <CheckList
+        items={listItems}
+        onDeleteItem={handleDeleteItem}
+        onToggleItem={handleToggleItem}
+      />
       <Stats />
     </div>
   );
@@ -78,22 +96,31 @@ function Form({ onAddItem }) {
   );
 }
 
-function CheckList({ items, onDeleteItem }) {
+function CheckList({ items, onDeleteItem, onToggleItem }) {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item key={item.id} item={item} onDeleteItem={onDeleteItem} />
+          <Item
+            key={item.id}
+            item={item}
+            onDeleteItem={onDeleteItem}
+            onToggleItem={onToggleItem}
+          />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item, onDeleteItem }) {
+function Item({ item, onDeleteItem, onToggleItem }) {
   return (
     <li>
-      <input type="checkbox" />
+      <input
+        type="checkbox"
+        value={item.done}
+        onChange={() => onToggleItem(item.id)}
+      />
       <span style={{ textDecoration: item.done ? "line-through" : "" }}>
         {item.title}
       </span>
